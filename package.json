@@ -1,0 +1,19 @@
+{
+  "name": "nodeexercises",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Alkut Askar",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "got": "^14.0.0",
+    "mongodb": "^6.3.0",
+    "yargs": "^17.7.2"
+  }
+}
