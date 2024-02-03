@@ -24,7 +24,7 @@ const argv = yargs(hideBin(process.argv))
 
         let countires = rawData.map(country => ({
             name: country.name,
-            'alpha-2': country['alpha-2']
+            'code': country['alpha-2']
         }));
 
         const db = await dbRtns.getDBInstance();

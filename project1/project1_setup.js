@@ -17,11 +17,23 @@ const argv = yargs(hideBin(process.argv))
     .alias("help", "h")
     .parse();
 
-(async () => {
+const loadAlerts = async () => {
+    let results = "";
     try {
+
+        const db = await dbRtns.getDBInstance();
+        // clean out collection before adding new users
+        let r = await dbRtns.deleteAll(db, cfg.alertCollections);
+
+        results = `Deleted ${r.deletedCount} existing documents from alerts collection.`
         let isoData = await getJSONFromWWWPromise(cfg.isodata);
         let alertJson = await getJSONFromWWWPromise(cfg.alertdata);
-
+        if (isoData !== null && alertJson !== null) {
+            // console.log(`Retrived Alert JSON from remote web site.`);
+            // console.log(`Retrived Country JSON from GitHub.`);
+            results += "Retrived Alert JSON from remote web site."
+            results += "Retrived Country JSON from GitHub."
+        }
         let countriesArray = [];
         for (var i = 0; i < Object.keys(isoData).length; i++) {
             // look for the entry with a matching `code` value
@@ -49,19 +61,19 @@ const argv = yargs(hideBin(process.argv))
             countriesArray.push(result);
         }
 
-        const db = await dbRtns.getDBInstance();
-        // clean out collection before adding new users
-        let results = await dbRtns.deleteAll(db, cfg.alertCollections);
 
-        results = await dbRtns.addMany(db, cfg.alertCollections, countriesArray
+        r = await dbRtns.addMany(db, cfg.alertCollections, countriesArray
         );
-        console.log(
-            `There are currently ${results.insertedCount} documents to the Alert Collections collection`
-        );
-        process.exit(0);
+        // console.log(
+        //     `There are currently ${r.insertedCount} documents to the Alert Collections collection.`
+        // );
+        results += `There are currently ${r.insertedCount} documents to the Alert Collections collection.`
 
     } catch (error) {
         console.log(error);
-        process.exit(1);
+    } finally {
+        return { results: results };
     }
-})(); // IIFE
+};
+
+export { loadAlerts };
