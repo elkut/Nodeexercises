@@ -8,21 +8,16 @@ const resolvers = {
     alerts: async () => {
         let db = await dbRtns.getDBInstance();
         let alerts = await dbRtns.findAll(db, cfg.alertCollections, {}, {});
-        //console.log(alerts); // Debug output
-        return await alerts; // Ensure this is an array of objects
+        return await alerts;
     },
     alertsforregion: async (args) => {
         let db = await dbRtns.getDBInstance();
         let alerts = await dbRtns.findAll(db, cfg.alertCollections, { region: args.region }, {});
-        //console.log(alerts);
-        //console.log(args.region);
         return await alerts;
     },
     alertsforsubregion: async (args) => {
         let db = await dbRtns.getDBInstance();
         let alerts = await dbRtns.findAll(db, cfg.alertCollections, { subregion: args.subregion }, {});
-        //console.log(alerts);
-        //console.log(args.region);
         return await alerts;
     },
     regions: async () => {
@@ -32,6 +27,32 @@ const resolvers = {
     subregions: async () => {
         let db = await dbRtns.getDBInstance();
         return await dbRtns.findUniqueValues(db, cfg.alertCollections, "subregion");
+    },
+    addAdvisories: async args => {
+        let db = await dbRtns.getDBInstance();
+        let advisor = { name: args.name, country: args.country, text: args.text, date: args.date };
+
+        try {
+            let results = await dbRtns.addOne(db, cfg.advisories, advisor);
+            return advisor;
+        } catch (error) {
+            console.error("Error adding advisor:", error);
+            return null;
+        }
+    },
+    advisoriesByName: async (args) => {
+        let db = await dbRtns.getDBInstance();
+        let advisories = await dbRtns.findAll(db, cfg.advisories, { name: args.name }, {});
+        return await advisories;
+    },
+    advisories: async () => {
+        let db = await dbRtns.getDBInstance();
+        let advisories = await dbRtns.findAll(db, cfg.advisories, {}, {});
+        return await advisories;
+    },
+    advisoriesUniqueName: async () => {
+        let db = await dbRtns.getDBInstance();
+        return await dbRtns.findUniqueValues(db, cfg.advisories, "name");
     },
 };
 export { resolvers }; 

@@ -7,3 +7,4 @@ export const appdb = process.env.DB;
 export const alertCollections = process.env.ALERTCOLLECTION;
 export const port = process.env.PORT;
 export const graphql = process.env.GRAPHQLURL;
+export const advisories = process.env.ADVISORIESCOLLECTION;
