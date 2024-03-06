@@ -28,5 +28,14 @@ const findAll = (db, coll, criteria, projection) =>
         .find(criteria)
         .project(projection)
         .toArray();
-
-export { getDBInstance, addOne, count, deleteAll, addMany, findOne, findAll };
+const updateOne = (db, coll, criteria, projection) =>
+    db
+        .collection(coll)
+        .findOneAndUpdate(
+            criteria,
+            { $set: projection },
+            { includeResultMetadata: true }
+        );
+const deleteOne = (db, coll, criteria) => db.collection(coll).deleteOne(criteria);
+const findUniqueValues = (db, coll, field) => db.collection(coll).distinct(field);
+export { getDBInstance, addOne, count, deleteAll, addMany, findOne, findAll, updateOne, deleteOne, findUniqueValues };

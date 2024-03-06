@@ -13,6 +13,3 @@ type Mutation {
 },
 `;
 export { schema };
-// type Mutation {
-//     addcountrybycode(code: String, name: String): Countries
-// },
